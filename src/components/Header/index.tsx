@@ -10,8 +10,6 @@ const Header = (): JSX.Element => {
   const { cart } = useCart();
   const cartSize = cart.length;
 
-  console.log("carrinho :: ", cart);
-
   return (
     <Container>
       <Link to="/">
