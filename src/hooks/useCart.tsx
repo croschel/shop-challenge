@@ -13,16 +13,11 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
-interface UpdateProductAmount {
-  productId: number;
-  amount: number;
-}
-
 interface CartContextData {
   cart: Product[];
   addProduct: (productId: number) => Promise<void>;
   removeProduct: (productId: number) => void;
-  updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void;
+  updateProductAmount: (productId: number, sum: boolean) => void;
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData);
@@ -91,14 +86,28 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
   };
 
-  const updateProductAmount = async ({
-    productId,
-    amount,
-  }: UpdateProductAmount) => {
+  const updateProductAmount = async (productId: number, sum: boolean) => {
     try {
-      // TODO
+      const stock = await api.get(`/stock/${productId}`);
+      const stockAmount = stock.data.amount;
+
+      const newArray = cart.map((item) => {
+        if (item.id === productId) {
+          if (sum) {
+            if (item.amount < stockAmount) {
+              item.amount += 1;
+            } else {
+              toast.error("Quantidade solicitada fora de estoque");
+            }
+          } else {
+            item.amount -= 1;
+          }
+        }
+        return item;
+      });
+      setCart(newArray);
     } catch {
-      // TODO
+      toast.error("Erro na alteração de quantidade do produto");
     }
   };
 
