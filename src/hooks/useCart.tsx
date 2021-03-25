@@ -25,7 +25,6 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
     const storagedCart = localStorage.getItem("@RocketShoes:cart");
-    console.log("storage :: ", storagedCart);
 
     if (storagedCart) {
       return JSON.parse(storagedCart);
@@ -37,7 +36,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     localStorage.setItem("@RocketShoes:cart", JSON.stringify(cart));
   }, [cart]);
 
-  console.log("carrinho :: ", cart);
   const addProduct = async (productId: number) => {
     try {
       let hasStock: boolean;
@@ -52,7 +50,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
       if (existItemIndex >= 0) {
         if (hasStock) {
-          console.log("Hey I am here");
           const newArray = cart.map((item) => {
             if (item.id === productId) {
               item.amount += 1;

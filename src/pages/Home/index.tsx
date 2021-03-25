@@ -21,10 +21,6 @@ const Home = (): JSX.Element => {
   const [products, setProducts] = useState<ProductFormatted[]>([]);
   const { addProduct, cart } = useCart();
 
-  /* const cartItemsAmount = cart.reduce((sumAmount, product) => {
-    return [];
-  }, {} as CartItemsAmount); */
-
   const findAmount = (productId: number) => {
     const element = cart.find((item) => item.id === productId);
     if (element) {
